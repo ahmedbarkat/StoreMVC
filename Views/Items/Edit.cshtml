@@ -1,0 +1,73 @@
+﻿@model Safoa.Models.Item
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = null;
+}
+
+<div class="portlet light bordered">
+
+    <div class="portlet-title">
+        <div class="caption font-red-sunglo">
+            <i class="icon-settings font-red-sunglo"></i>
+            <span class="caption-subject bold uppercase"> الصنف</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+
+        @using (Ajax.BeginForm("Edit", "Items", null, new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "contentBodyData", OnSuccess = "saveDone" }, new { @class = " nav-link ", @role = "form" }))
+        {
+
+
+            @Html.HiddenFor(model => model.Id)
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-body ">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group form-md-line-input  ">
+                            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control ", required = "required" } })
+
+                            <label for="Name">
+                                اسم الصنف
+                                <span class="required" aria-required="true"> * </span>
+                            </label>
+
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger " })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group form-md-line-input  ">
+                            @Html.EditorFor(model => model.InitialPrice, new { htmlAttributes = new { @class = "form-control", required = "required" } })
+
+                            <label for="CertificateNum">
+                                السعر
+                                <span class="required" aria-required="true"> * </span>
+                            </label>
+                            @Html.ValidationMessageFor(model => model.InitialPrice, "", new { @class = "text-danger " })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group form-md-line-input  ">
+                            @Html.EditorFor(model => model.Notes, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.LabelFor(model => model.Notes, "الملاحظات", htmlAttributes: new { @class = "" })
+                            @Html.ValidationMessageFor(model => model.Notes, "", new { @class = "text-danger " })
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-actions noborder">
+                    <button type="submit" class="btn blue">Submit</button>
+                    <a href="@Url.Content("~/Items/Index")" class="nav-link nav-toggle nav-link btn default " data-ajax="true" HttpMethod="Get"
+                       data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#contentBodyData">
+                        <span class="title fa fa-backward"> رجوع </span>
+                    </a>
+                </div>
+
+
+            </div>
+        }
+    </div>
+</div>
+

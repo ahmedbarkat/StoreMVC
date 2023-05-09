@@ -1,0 +1,361 @@
+﻿@model Safoa.Models.SellOrder
+
+@{
+    ViewBag.Title = "Create";
+    Layout = null;
+    List<Safoa.Models.SellOrderItem> SellOrderItems = ViewBag.SellItems;
+}
+
+<div class="portlet light bordered">
+
+    <div class="portlet-title">
+        <div class="caption font-red-sunglo">
+            <i class="icon-settings font-red-sunglo"></i>
+            <span class="caption-subject bold uppercase"> مبيعات</span>
+        </div>
+    </div>
+    <div class="portlet-body form">
+        @using (Ajax.BeginForm((Model == null || Model.Id == 0 ? "Create" : "Edit"), "SellOrders", null, new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "contentBodyData", OnSuccess = "saveDone" }, new { @class = "  ", @role = "form", id = "sellOrder" }))
+        {
+            @Html.HiddenFor(model => model.Id)
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-body ">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group form-md-line-input">
+                            @Html.TextBoxFor(model => model.Name, new { @class = " form-control required " })
+                            <label for="Name">Name</label>
+                            <span class="help-block help-block-error valid" for="Name"></span>
+                            <div class="form-control-focus"> </div>
+
+                        </div>
+                    </div>
+                   
+                    <div class="col-md-4">
+                        <div class="form-group form-md-line-input  ">
+                            @Html.EditorFor(model => model.TotalPrice, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.LabelFor(model => model.TotalPrice, "الإجمالى", htmlAttributes: new { @class = "" })
+                            @Html.ValidationMessageFor(model => model.TotalPrice, "", new { @class = "text-danger " })
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group form-md-line-input  ">
+                            @Html.EditorFor(model => model.Notes, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.LabelFor(model => model.Notes, "ملاحظات", htmlAttributes: new { @class = "" })
+                            @Html.ValidationMessageFor(model => model.Notes, "", new { @class = "text-danger " })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                       
+                            <div class="form-group form-md-line-input  ">
+                                <label for="CertificateNum">
+                                    العناصر
+                                    <span class="required" aria-required="true"> * </span>
+                                </label>
+                                @*@Html.EditorFor(model => model.ItemId, new { htmlAttributes = new { @class = "form-control", required = "required" } })*@
+                                <select name="item_select" id="item_select" class="form-control select2 items-ajax col-md-12" data-ajax-url="/SellOrders/getItems"></select>
+
+
+                          
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="portlet box purple">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-cogs"></i>العناصر
+                            </div>
+                            <div class="tools">
+                                <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+                                <a href="#portlet-config" data-toggle="modal" class="config" data-original-title="" title=""> </a>
+                                <a href="javascript:;" class="reload" data-original-title="" title=""> </a>
+                                <a href="javascript:;" class="remove" data-original-title="" title=""> </a>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="table-scrollable">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" style="width:450px !important"> # </th>
+                                            <th scope="col"> العنصر </th>
+                                            <th scope="col"> السعر </th>
+                                            <th scope="col"> المسح </th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="items_body">
+                                        @if (SellOrderItems != null)
+                                        {
+                                            for (int it = 0; it < SellOrderItems.Count; it++)
+                                            {
+                                                <tr class="form-group form-md-line-input form-md-floating-label">
+
+                                                    <td class="count_td"> @(it + 1) </td>
+                                                    <td class="item_td"> <input class="item_name form-control" name="item_name" readonly="readonly" value="@SellOrderItems[it].Items.Name" /><input type="hidden" name="itemId" class="hidden_item" value="@SellOrderItems[it].ItemId" /> </td>
+                                                    <td class="price_td"> <input type="text" name="price" class="price form-control" value="@SellOrderItems[it].Price" /> </td>
+                                                    <td>
+                                                        <a href="@Url.Content("~/SellOrders/DeleteItem/")@SellOrderItems[it].Id" class="nav-link nav-toggle nav-link btn btn-danger " data-ajax="true" HttpMethod="Get"
+                                                           data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#contentBodyData">
+                                                            <span class="title fa fa-recycle"> مسح </span>
+                                                        </a>
+
+
+                                                    </td>
+
+                                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                    <tr>
+                                        <td>
+                                            <input type="hidden" required id="items-data" />
+                                            <span class="help-block help-block-error valid" for="items-data"></span>
+                                            <div class="form-control-focus"> </div>
+                                        </td>
+                                    </tr>
+
+
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions noborder">
+                    <button type="button" class="btn blue" onclick="submitForm()">Submit</button>
+                    <a href="@Url.Content("~/SellOrders/Index")" class="nav-link nav-toggle nav-link btn default " data-ajax="true" HttpMethod="Get"
+                       data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#contentBodyData">
+                        <span class="title fa fa-backward"> رجوع </span>
+                    </a>
+                </div>
+
+
+            </div>
+
+        }
+    </div>
+</div>
+<template id="item_template">
+    <tr class="form-group form-md-line-input form-md-floating-label">
+
+        <td class="count_td"> Table data </td>
+        <td class="item_td"> <input class="item_name form-control" name="item_name" readonly="readonly" /><input type="hidden" name="itemId" class="hidden_item" /> </td>
+        <td class="price_td"> <input type="text" name="price" class="price form-control" /> </td>
+        <td>
+            <a href="#" class="nav-link nav-toggle nav-link btn btn-danger ">
+                <span class="title fa fa-recycle"> مسح </span>
+            </a>
+        </td>
+
+    </tr>
+</template>
+<script>
+    function submitForm() {
+        var $form = $('#sellOrder');
+        if ($form.valid() == true) {
+            $form.submit();
+        } else {
+                        e.preventDefault();
+            App.scrollTop();
+            return false;
+
+            return false;
+        }
+    }
+    $(document).ready(function () {
+
+        InitSelect2($('#sellOrder'));
+
+
+        $('#sellOrder').on('click', '.fa-recycle', function () {
+
+            var $this = $(this);
+            var $row = $this.closest('tr');
+            debugger
+            var attr = $(this).attr('data-id');
+
+            if (typeof attr === typeof undefined || attr === false || $this.attr('data-id') == null || $this.attr('data-id') == undefined) {
+                $row.remove();
+            }
+        });
+        $('.items-ajax').on("select2:selecting", function (e) {
+            //handelSelect(e)
+        });
+        $('.items-ajax').on('change', function () {
+
+            var id = $(".select2 option:selected").val();
+            var name = $(".select2 option:selected").text();
+            handelSelect(id, name);
+        })
+        function handelSelect(id, name) {
+            ;
+            var id = id;
+            $.ajax({
+                url: "@Url.Content("~/SellOrders/GetItems")",
+                data: { 'id': id },
+                dataType: 'json'
+            }).done(function (data) {
+
+                addItem(data);
+
+
+            });
+
+        }
+        function addItem(data) {
+            if (data.length > 0) {
+                var len = $('#items_body').find('tr').length + 1;
+
+                var $template = $($('#item_template').clone().html())
+                $template.find('.count_td').html(len);
+
+                $template.find('.item_name').val(data[0].Name);
+                $template.find('.hidden_item').val(data[0].Id);
+                $template.find('.price').val(data[0].InitialPrice);
+                $('#items_body').append($template);
+                $('.items-ajax').val(null).trigger('change');
+
+
+            }
+
+
+        }
+
+    });
+    function InitSelect2($container) {
+        $container.find(".select2").each(function () {
+            var $this = $(this);
+            if ($this.attr('multiple') == 'multiple') {
+                var options = {
+                    allowClear: true,
+                    multiple: true,
+                    escapeMarkup: function (m) {
+                        return m;
+                    }
+                };
+            } else {
+                var options = {
+                    dir: "{% trans 'ltr' %}",
+                    allowClear: true,
+                    escapeMarkup: function (m) {
+                        return m;
+                    }
+                };
+            }
+            if ($this.attr("placeholder")) {
+                options['placeholder'] = $this.attr("placeholder");
+            }
+            if ($this.attr("disabled")) {
+                //$this.prop('disabled', true);
+                //options['disabled'] = true;
+                //options['enable'] = false;
+            }
+            var url = $this.attr("data-ajax-url");
+            var lang = $this.attr("lang");
+            var empty_url = $this.attr("data-empty-ajax-url");
+
+            if (url) {
+                $.extend(options,
+                    {
+                        ajax: {
+                            url: url,
+                            dataType: 'json',
+                            type: 'GET',
+                            quietMillis: 250,
+                            data: function (params, page) {
+
+                                var sendData = {
+                                    'name': params.term
+                                };
+
+                                return sendData;
+                            },
+                            processResults: function (data, page) {
+
+                                select2data = $.map(data, function (obj) {
+
+                                    obj.id = obj.Id;
+                                    obj.text = obj.Name;
+                                    return obj;
+                                });
+
+                                return {
+                                    results: select2data
+
+                                };
+                            }
+                        },
+                        language: {
+                            errorLoading: function () {
+                                return 'Error results could not be loaded.';
+                            },
+                            noMatches: function (term) {
+                                return "no Matches";
+                            },
+                            inputTooShort: function (args) {
+                                var remainingChars = args.minimum - args.input.length;
+                                var message = 'Please enter ' + remainingChars + ' or more characters';
+
+                                return message;
+                            },
+                            loadingMore: function (term) {
+                                return "loading More";
+                            }, noResults: function () {
+                                if (empty_url) {
+                                    return '<a class="add-new-modal" data-remote-url="' + empty_url + '"  '
+                                        + '  data-modal="#new-client-modal" '
+                                        + ' ><i class="fa fa-plus"></i> Add New Client</a>';
+                                } else return 'No results found';
+                            },
+                            searching: function () {
+                                return 'Searching';
+                            }
+                        },
+                        minimumInputLength: 2
+                    }
+                );
+            }
+            $this.select2(options).on("select2:open", function () {
+                if (lang === 'ar') {
+                    options['dir'] = "rtl";
+                    $(".select2-search__field").attr("lang", lang);
+                }
+            }).on("select2:query", function () {
+                console.log('select2:query');
+            }).on("select2:close", function () {
+                $(".select2-search__field").attr("lang", null);
+            });
+            var initial_id = $this.val();
+            //console.log(initial_id);
+            if (initial_id != '' && initial_id != null && url) {
+                var $option = $('<option selected>Loading...</option>').val(initial_id);
+                // append the option and update Select2
+                $.ajax({
+                    url: url,
+                    data: { 'query': (initial_id) },
+                    dataType: "json",
+                    type: 'GET'
+                }).then(function (data) {
+                    // Here we should have the data object
+                    var option_html = "";
+                    $option.removeData(); // remove any caching data that might be associated
+                    var array = {};
+                    for (var t = 0; t < data.length; t++) {
+                        $this.append('<option value=' + data[t].id + ' selected>' + data[t].name + '</option>')
+                    }
+                    $this.trigger('change'); // notify JavaScript components of possible changes
+                });
+            }
+        });
+
+    }
+</script>

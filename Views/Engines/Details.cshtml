@@ -1,0 +1,65 @@
+﻿@model Safoa.Models.Engine
+
+@{
+    ViewBag.Title = "Details";
+    Layout = null;
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Engine</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.EngineNum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EngineNum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CertificateNum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CertificateNum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VoucherNum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VoucherNum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    
+    <a href="@Url.Content("~/Engines/Edit/")@Model.Id" class="nav-link nav-toggle nav-link btn yellow " data-ajax="true" HttpMethod="Get"
+       data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#contentBodyData">
+        <span class="title fa fa-backward"> تعديل </span>
+    </a>     |
+    <a href="@Url.Content("~/Engines/Index")" class="nav-link nav-toggle nav-link btn default " data-ajax="true" HttpMethod="Get"
+       data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#contentBodyData">
+        <span class="title fa fa-backward"> رجوع </span>
+    </a></p>

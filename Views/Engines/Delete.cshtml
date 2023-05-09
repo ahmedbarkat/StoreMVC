@@ -1,0 +1,69 @@
+﻿@model Safoa.Models.Engine
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = null;
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Engine</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.EngineNum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EngineNum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CertificateNum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CertificateNum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VoucherNum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VoucherNum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+    </dl>
+
+
+@using (Ajax.BeginForm("Delete", "Engines", null, new AjaxOptions { HttpMethod = "Post", UpdateTargetId = "contentBodyData", OnSuccess = "saveDone" }, new { @class = " nav-link ", @role = "form" }))
+{
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-danger" /> |
+            <a href="@Url.Content("~/Engines/Index")" class="nav-link nav-toggle nav-link btn default " data-ajax="true" HttpMethod="Get"
+               data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#contentBodyData">
+                <span class="title fa fa-backward"> رجوع </span>
+            </a>        </div>
+    }
+</div>

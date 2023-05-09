@@ -1,0 +1,40 @@
+﻿@model Safoa.Models.Item
+
+@{
+    ViewBag.Title = "Details";
+    Layout = null;
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Engine</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.InitialPrice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Notes)
+        </dt>
+
+
+
+    </dl>
+</div>
+<p>
+
+    <a href="@Url.Content("~/Items/Edit/")@Model.Id" c class="nav-link nav-toggle nav-link btn yellow " data-ajax="true" HttpMethod="Get"
+       data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#contentBodyData">
+        <span class="title fa fa-backward"> تعديل </span>
+    </a>     |
+    <a href="@Url.Content("~/Items/Index")" class="nav-link nav-toggle nav-link btn default " data-ajax="true" HttpMethod="Get"
+       data-ajax-method="Get" data-ajax-mode="replace" data-ajax-update="#contentBodyData">
+        <span class="title fa fa-backward"> رجوع </span>
+    </a>
+</p>
